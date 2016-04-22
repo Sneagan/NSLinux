@@ -52,7 +52,7 @@ private func pthreadRunner( arg: UnsafeMutablePointer<Void> ) -> UnsafeMutablePo
 
 public func dispatch_async( queue: dispatch_queue_t, _ block: dispatch_block_t ) {
     let holder = Unmanaged.passRetained( pthreadBlock( block: block ) )
-    let pointer = UnsafeMutablePointer<Void>( holder.toOpaque )
+    let pointer = UnsafeMutablePointer<Void>( holder.toOpaque() )
     #if os(Linux)
     var pthread: pthread_t = 0
     #else
