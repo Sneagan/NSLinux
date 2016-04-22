@@ -44,7 +44,7 @@ private class pthreadBlock {
 }
 
 private func pthreadRunner( arg: UnsafeMutablePointer<Void> ) -> UnsafeMutablePointer<Void> {
-    let unmanaged = Unmanaged<pthreadBlock>.fromOpaque( COpaquePointer( arg ) )
+    let unmanaged = Unmanaged<pthreadBlock>.fromOpaque( OpaquePointer( arg ) )
     unmanaged.takeUnretainedValue().block()
     unmanaged.release()
     return arg
@@ -52,7 +52,7 @@ private func pthreadRunner( arg: UnsafeMutablePointer<Void> ) -> UnsafeMutablePo
 
 public func dispatch_async( queue: dispatch_queue_t, _ block: dispatch_block_t ) {
     let holder = Unmanaged.passRetained( pthreadBlock( block: block ) )
-    let pointer = UnsafeMutablePointer<Void>( holder.toOpaque() )
+    let pointer = UnsafeMutablePointer<Void>( holder.toOpaque )
     #if os(Linux)
     var pthread: pthread_t = 0
     #else
@@ -73,7 +73,7 @@ public func dispatch_time( now: dispatch_time_t, _ nsec: Int64 ) -> dispatch_tim
 }
 
 public func dispatch_after( delay: dispatch_time_t, _ queue: dispatch_queue_t, _ block: dispatch_block_t ) {
-    dispatch_async( queue, {
+    dispatch_async( queue: queue, {
         sleep( UInt32(Int(delay)/NSEC_PER_SEC) )
         block()
     } )

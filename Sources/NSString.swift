@@ -98,7 +98,7 @@ public extension String {
 */
 
     public func stringByReplacingOccurrencesOfString( str1: String, withString str2: String ) -> String {
-        return componentsSeparatedByString( str1 ).joinWithSeparator( str2 )
+        return componentsSeparatedByString( str1 ).joined(separator: str2 )
     }
 
     public func rangeOfString( str: String ) -> Range<Int>? {
@@ -116,7 +116,7 @@ public extension String {
         withCString { (bytes) in
             let bytes = UnsafeMutablePointer<Int8>(bytes)
             bytes[index] = 0
-            out = String.fromCString( bytes )!
+            out = String(bytes)
         }
         return out
     }
@@ -124,7 +124,7 @@ public extension String {
     public func substringFromIndex( index: Int ) -> String {
         var out = self
         withCString { (bytes) in
-            out = String.fromCString( bytes+index )!
+            out = String( bytes+index )
         }
         return out
     }
